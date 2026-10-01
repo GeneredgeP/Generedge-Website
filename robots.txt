@@ -1,3 +1,4 @@
-# Preview deployment — not the production site.
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://generedge.com/sitemap.xml
