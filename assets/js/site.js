@@ -263,6 +263,8 @@
       return true;
     }
     if (PROVIDER === 'formspree' && body && body.ok === false) return false;
+    // The Apps Script answers {"ok":false} with a 200 if MailApp fails.
+    if (PROVIDER === 'custom' && body && body.ok === false) return false;
     return true;
   }
 
@@ -296,9 +298,18 @@
       if (replyTo) body._replyto = replyTo;
     }
 
+    // The custom endpoint is a Google Apps Script web app, which cannot answer
+    // a CORS preflight. 'application/json' (or any extra header such as
+    // Accept) would trigger one, so send the same JSON as text/plain: that is
+    // a "simple" request, fetch follows Apps Script's 302 to its content host
+    // and reads the 200. The script parses the body as JSON regardless.
+    var headers = PROVIDER === 'custom'
+      ? { 'Content-Type': 'text/plain;charset=utf-8' }
+      : { 'Content-Type': 'application/json', Accept: 'application/json' };
+
     var request = fetch(ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      headers: headers,
       body: JSON.stringify(body)
     }).then(function (res) {
       return res.json().catch(function () { return null; }).then(function (json) {
