@@ -104,13 +104,14 @@ SITE = {
 # Whatever the provider, a failed send never loses the lead: site.js falls back
 # to a pre-filled mailto: link so the visitor can send the same details by email.
 FORM = {
-    "provider": "formsubmit",
-    # Where leads land. Deliberately a person's mailbox, not the shared info@
-    # address — whoever owns it has to click FormSubmit's one-time activation
-    # link, and they are the one watching for leads. Change this and rebuild to
-    # point it somewhere else.
+    # Leads go to GenerEdge's own Google Apps Script web app (source in
+    # apps-script/Code.gs, project "GenerEdge — Website Forms" under
+    # eduardo@generedge.com), which emails them and logs them to a Sheet.
+    "provider": "custom",
+    # Shown to visitors in the failure fallback (mailto link). The address the
+    # Apps Script sends leads to is the TO constant in apps-script/Code.gs.
     "email": "eduardo@generedge.com",
-    "endpoint": "",
+    "endpoint": "https://script.google.com/macros/s/AKfycbwIcdy5jJyotFhhLvyarHE3Gx8K-_vRUsRwvYX3M092Yodhu-5NM4qS_k7VsZhnxgD9/exec",
     "access_key": "",
     "subject": "New enquiry from generedge.com",
 }

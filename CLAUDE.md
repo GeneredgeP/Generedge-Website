@@ -140,56 +140,61 @@ Also confirm image licensing — `handshake.jpg` has a stock-photo-style filenam
 (`57237323-view-of-an-architect...`). If it was a licensed stock photo, confirm
 the licence transfers to the new site, or replace it.
 
-### 2. Forms — connected, one activation click outstanding
+### 2. Forms — connected to GenerEdge's own Apps Script
 
 All three lead forms post to whatever the `FORM` dict in `scripts/build.py`
-names. It is set to `formsubmit`, which emails each submission to
-**`eduardo@generedge.com`** with no account, no API key and no server. Change
-that one value and rebuild to send leads somewhere else.
+names. It is set to provider **`custom`**, endpoint = the `/exec` URL of a
+Google Apps Script web app owned by GenerEdge:
 
-**The one thing left:** FormSubmit will not deliver to an address it has not
-verified. The activation POST has already been sent, so an
-email from FormSubmit with an **"Activate Form"** link is sitting in
-`eduardo@generedge.com`. Clicking it once turns delivery on permanently. Until
-someone does, the endpoint answers every submission with:
+- **Project:** "GenerEdge — Website Forms" at script.google.com, account
+  `eduardo@generedge.com`. Deployed as Web app, *Execute as: Me*, *Who has
+  access: Anyone*.
+- **Source:** `apps-script/Code.gs` in this repo is the source of truth. It
+  emails each lead to `TO` (`eduardo@generedge.com`) with reply-to = the
+  visitor's email, and appends it to the Google Sheet "GenerEdge — Website
+  Leads" (its ID is in the script's properties, set by `setup()`).
+- **Updating the script without changing the URL:** paste the new `Code.gs`,
+  save, then Deploy → **Manage deployments** → pencil → Version: **New
+  version** → Deploy. "New deployment" would create a different `/exec` URL and
+  the live site would keep hitting the old code.
+- **Recipient** is the `TO` constant in `Code.gs`. `FORM["email"]` in
+  `build.py` is only shown to visitors in the failure fallback.
 
-    {"success":"false","message":"This form needs Activation. We've sent you an
-     email containing an 'Activate Form' link..."}
+**Why `text/plain`.** For the `custom` provider, `send()` in `site.js` posts the
+JSON body with `Content-Type: text/plain;charset=utf-8` and no other headers.
+Apps Script does not answer CORS preflight (`OPTIONS`), and `application/json`
+or an `Accept` header would trigger one, so every submission would fail.
+As a simple request, fetch follows Apps Script's 302 and reads the
+`200 {"ok":true}`. `succeeded()` treats `{"ok":false}` (MailApp failed) as a
+failure. **Do not add headers to the custom branch.**
 
-which `succeeded()` correctly treats as a failure, so the visitor gets the
-phone number, the email address and the mailto fallback instead of a
-thank-you for a lead that went nowhere. That is what the screenshot of
-"We could not send that from here" was showing — the fallback working, not a
-bug.
+**No-JavaScript path.** The form's `action` is the same `/exec` URL; a native
+urlencoded POST carries raw names (`first_name`, `email`...). `Code.gs` maps
+them to the same labels and returns a small HTML thank-you page instead of JSON.
 
 **GitHub cannot host this itself.** A GitHub Action cannot receive an anonymous
 browser POST, and anything that could (a `repository_dispatch`, the API) needs a
 token, which on a static site would have to sit in client-side JavaScript where
-any visitor can read it. Sending mail from an Action needs SMTP credentials with
-the same problem. A third-party form service, or the serverless endpoint
-described below, is the only way to do this without a server.
+any visitor can read it. The Apps Script is the server-side piece that makes this
+work without a server. Close CRM remains the best end state, via an endpoint
+holding the API key — **the key must never be in this repo or in client-side
+JS** (an Apps Script property would do).
 
-Until that happens nothing is silently lost. `succeeded()` in `site.js` treats an
-activation-pending reply as a failure, so the visitor gets the phone number, the
-email address and the pre-filled mailto fallback rather than a thank-you for a
-lead that went nowhere.
-
-To move to something else, change `FORM["provider"]` and rebuild — `formsubmit`,
-`web3forms` (needs `access_key`), `formspree` (needs `endpoint`), or `custom`
-(any URL taking a JSON POST). `assets/js/site.js` handles all four; no JS edit
-is needed. Close CRM remains the best end state, via a small serverless endpoint
-holding the API key — **the key must never be in this repo or in client-side JS.**
+To move to something else, change `FORM["provider"]` and rebuild — `custom`,
+`formsubmit` (needs a one-time activation click per address), `web3forms`
+(needs `access_key`) or `formspree` (needs `endpoint`). `site.js` handles all
+four.
 
 If a send fails for any reason, the form shows the phone number and email
 address plus a "Send it by email instead" link that opens the visitor's mail
 client pre-filled with everything they typed. A lead is never silently lost.
 
-Forms also include: a honeypot named `_honey` (FormSubmit's own honeypot, so a
-no-JavaScript POST gets server-side bot filtering too), `aria-invalid` +
-`role="alert"` inline errors, an `aria-live` status region, a 20-second send
-timeout, `aria-disabled` while sending (not `disabled`, which would drop the
-visitor's focus to `<body>` mid-request), and a `generate_lead` GA event on
-success.
+Forms also include: a honeypot named `_honey` (checked client-side and again
+in `Code.gs`, so a no-JavaScript POST gets server-side bot filtering too),
+`aria-invalid` + `role="alert"` inline errors, an `aria-live` status region, a
+20-second send timeout, `aria-disabled` while sending (not `disabled`, which
+would drop the visitor's focus to `<body>` mid-request), and a `generate_lead`
+GA event on success.
 
 They also carry a real `method`/`action`, so a visitor without JavaScript still
 reaches the endpoint. **Do not remove those attributes** — a form with no action

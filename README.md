@@ -59,31 +59,44 @@ application, and the contact form) all post to whatever is configured in the
 
 ```python
 FORM = {
-    "provider": "formsubmit",
-    "email": "info@generedge.com",
+    "provider": "custom",
+    "email": "eduardo@generedge.com",   # only used in the visitor's fallback
+    "endpoint": "https://script.google.com/macros/s/AKfycbwIcdy5jJyotFhhLvyarHE3Gx8K-_vRUsRwvYX3M092Yodhu-5NM4qS_k7VsZhnxgD9/exec",
     ...
 }
 ```
 
-**Current setup: `formsubmit`.** Each submission is emailed to
-`info@generedge.com`. There is no account, no API key and no server — it works
-from any static host.
+**Current setup: GenerEdge's own Google Apps Script.** No third-party form
+service. Each submission is emailed to `eduardo@generedge.com`, with reply-to
+set to the visitor's email, and appended to the Google Sheet
+**"GenerEdge — Website Leads"** in the same account.
 
-> ### One-time activation — the only step left before leads arrive
-> FormSubmit will not deliver to an address it has not verified. **The
-> activation POST has already been sent**, so an email from FormSubmit with an
-> **"Activate Form"** link is waiting in `eduardo@generedge.com`. Click it once
-> and delivery is on permanently. Send a test through the live contact form
-> afterwards to confirm.
->
-> Until that happens nothing is lost: the endpoint reports the submission as
-> failed, and the form falls back to the phone number, the email address and a
-> "Send it by email instead" link carrying everything the visitor typed. If you
-> saw *"We could not send that from here"* on the live site, that was this — the
-> fallback doing its job.
->
-> To send leads somewhere else, change `FORM["email"]` in `scripts/build.py` and
-> rebuild. The new address needs its own activation click.
+- **Where the script lives:** script.google.com, signed in as
+  `eduardo@generedge.com`, project **"GenerEdge — Website Forms"**. Deployed as
+  a Web app: *Execute as: Me*, *Who has access: Anyone* (not "Anyone with a
+  Google account" — that would make every visitor's POST fail).
+- **Source of truth:** `apps-script/Code.gs` in this repo. Edit it here, paste
+  it into the editor, save.
+- **Redeploy without changing the URL:** Deploy → **Manage deployments** →
+  pencil on the existing deployment → Version: **New version** → Deploy.
+  *Never* use "New deployment" for an update: it mints a new `/exec` URL and the
+  live site keeps posting to the old version.
+- **Change the recipient:** the `TO` constant in `Code.gs`, then redeploy as
+  above. `FORM["email"]` in `build.py` is only what the visitor sees in the
+  fallback.
+- **Health check:** opening the `/exec` URL in a browser returns
+  `{"ok":true,"service":"generedge.com forms"}`.
+
+`site.js` posts the JSON with `Content-Type: text/plain;charset=utf-8` and no
+other headers for the `custom` provider. That is deliberate: Apps Script cannot
+answer a CORS preflight, and `application/json` would trigger one. As a "simple"
+request, fetch follows Apps Script's redirect and reads the `200 {"ok":true}`.
+A `{"ok":false}` (MailApp failure) counts as a failure.
+
+Without JavaScript the form does a native urlencoded POST to the same URL with
+raw field names; the script maps them to the same labels and shows the visitor a
+small thank-you page. The `_honey` honeypot is checked server-side on both
+paths — if it carries anything the script answers ok and drops the submission.
 
 ### Can GitHub Actions handle the form instead?
 
@@ -94,21 +107,19 @@ where anyone can read it and use it against the repo. Sending mail from an
 Action has the same problem with SMTP credentials.
 
 Actions run *after* a push, which is why they are right for building and
-deploying this site and wrong for receiving form submissions. The options are a
-third-party form service (what this uses), or a small serverless endpoint
-(Cloudflare Worker, Hostinger PHP) that holds the secret server-side — that is
-the route to the Close CRM integration described in `CLAUDE.md`.
+deploying this site and wrong for receiving form submissions. The Apps Script
+web app is the endpoint that holds the "secret" (the Google account) server-side.
 
 ### Switching provider
 
-Change `FORM["provider"]` and re-run the build. No JavaScript changes needed.
+Change `FORM["provider"]` and re-run the build.
 
 | provider | what to set | notes |
 |---|---|---|
-| `formsubmit` | `email` | default, currently `eduardo@generedge.com`. No signup; one-time activation as above. |
+| `custom` | `endpoint` | **current** — the Apps Script `/exec` URL. Any endpoint taking a `text/plain` body containing JSON and answering 2xx works. |
+| `formsubmit` | `email` | no signup, but each address needs a one-time activation click. |
 | `web3forms` | `access_key` | free key emailed to you by web3forms.com. The key is public by design — it only permits posting to your own inbox. |
 | `formspree` | `endpoint` | your `https://formspree.io/f/xxxx` URL. |
-| `custom` | `endpoint` | any URL accepting a JSON `POST`. Use this for the Close CRM worker described in `CLAUDE.md`. |
 
 Whatever the provider, **a lead is never silently lost**: if the request fails,
 the form shows the phone number and email address plus a "Send it by email
@@ -197,7 +208,7 @@ GE_ORIGIN=https://generedgep.github.io GE_BASE=/Generedge-Website python3 script
 
 ## Still outstanding before the domain moves
 
-- [ ] **Activate FormSubmit** — click the "Activate Form" link already waiting in `eduardo@generedge.com`
+- [x] Lead forms delivering — via the GenerEdge Apps Script (see "Where the forms go")
 - [ ] Set the real GA4 measurement ID in `SITE["ga_id"]` — analytics stay off until then
 - [ ] Tracey signs off on the copy flagged in `CLAUDE.md` §4 — including the
       SMS consent checkbox becoming optional, the 4 msgs/mo frequency, and the
