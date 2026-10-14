@@ -24,6 +24,26 @@ const TO = 'eduardo@generedge.com';
 const SITE = 'https://generedge.com';
 const SHEET_NAME = 'GenerEdge — Website Leads';
 
+// ---------------------------------------------------------------- spam
+// Anything judged spam is NOT emailed but IS logged to the Sheet with the
+// reason in the Status column, so a false positive is never a lost lead —
+// filter the Sheet by Status to review them.
+//
+// The bots seen so far POST straight to this /exec URL (it is the form's
+// action, so it is in the page source) without loading the page. site.js
+// sends _t, the milliseconds the visitor spent on the page; a direct POST
+// has none, and a bot that does run the page submits almost instantly.
+const MIN_FILL_MS = 2000;
+
+// The multilingual "I wanted to know your price" template.
+const SPAM_PHRASES = [
+  /zin[aā]t (savu|j[uū]su) cenu/i,
+  /узнать (вашу|свою) цен/i,
+  /\bwanted to know (your|the) price/i,
+  /quer[ií]a saber (su|tu|el) precio/i,
+  /wollte (ihren|deinen|den) preis wissen/i,
+];
+
 // Raw field names (no-JS path) → the labels the JS path already uses.
 const LABELS = {
   form_name: 'Form',
@@ -51,9 +71,14 @@ function doPost(e) {
     data = (e && e.parameter) || {};
   }
 
-  if (data._honey) return reply_(native, { ok: true });   // bot: say ok, drop it
-
   const lead = normalise_(data);
+
+  const spam = verdict_(data, native, lead);
+  if (spam) {
+    log_(lead, spam);
+    // Answer as if it worked: telling a bot why it failed teaches it.
+    return reply_(native, { ok: true, held: native });
+  }
   const replyTo = String(lead['Email'] || '').trim();
   const subject = (lead['Form'] || 'Website enquiry') + ' — generedge.com';
   const lines = Object.keys(lead).map(function (k) { return k + ': ' + lead[k]; });
@@ -77,6 +102,43 @@ function doPost(e) {
 
   log_(lead, 'sent');
   return reply_(native, { ok: true });
+}
+
+/** '' for a real lead, otherwise the reason it was held. */
+function verdict_(data, native, lead) {
+  if (data._honey) return 'spam: honeypot filled';
+  // Real visitors run site.js and arrive as JSON. A urlencoded POST is the
+  // no-JavaScript path, which in practice is only ever bots; the rare real
+  // person who lands here is logged and told to call or email.
+  if (native) return 'held: posted without the page (no JavaScript)';
+  const t = Number(data._t);
+  if (!t) return 'spam: no page timer';
+  if (t < MIN_FILL_MS) return 'spam: filled in ' + t + ' ms';
+  return contentFlag_(lead);
+}
+
+function contentFlag_(lead) {
+  const first = String(lead['First name'] || '');
+  const last = String(lead['Last name'] || '');
+  const msg = String(lead['Message'] || '');
+  const all = Object.keys(lead).map(function (k) { return String(lead[k]); }).join('\n');
+
+  if (/https?:|www\.|<a\s/i.test(first + ' ' + last)) return 'spam: link in name';
+  const tag = camelTail_(first);
+  if (tag && tag === camelTail_(last)) return 'spam: same tag on both names (' + tag + ')';
+  if ((msg.match(/https?:\/\/|www\./gi) || []).length >= 2) return 'spam: several links in message';
+  if (/[\u0400-\u04FF]/.test(all)) return 'spam: Cyrillic text';
+  for (var i = 0; i < SPAM_PHRASES.length; i++) {
+    if (SPAM_PHRASES[i].test(all)) return 'spam: known template';
+  }
+  return '';
+}
+
+// "LarryNeokyGM" -> "NeokyGM": the tag some bots glue onto a real first name,
+// identical on first and last name ("LarryNeokyGM MichaelNeokyGM").
+function camelTail_(name) {
+  const m = /[a-z]([A-Z][A-Za-z]{3,})$/.exec(String(name).trim());
+  return m ? m[1] : '';
 }
 
 // Health check: opening the /exec URL in a browser shows {"ok":true,...}.
@@ -142,7 +204,10 @@ function log_(lead, status) {
 
 function reply_(native, obj) {
   if (!native) return json_(obj);
-  const msg = obj.ok
+  const msg = obj.held
+    ? 'We could not send this form automatically. Please email ' + TO +
+      ' or call (727) 370-0200 and we will help you right away.'
+    : obj.ok
     ? 'Thank you — we received your details and will be in touch shortly.'
     : 'Sorry, something went wrong. Please email ' + TO + ' or call (727) 370-0200.';
   return HtmlService.createHtmlOutput(
@@ -174,7 +239,8 @@ function setup() {
   const res = doPost({
     postData: {
       type: 'text/plain',
-      contents: JSON.stringify({ Form: 'Setup test', 'First name': 'Test', Email: TO }),
+      // _t stands in for the page timer site.js sends, or this would be held as spam.
+      contents: JSON.stringify({ Form: 'Setup test', 'First name': 'Test', Email: TO, _t: '5000' }),
     },
   });
   console.log(res.getContent());

@@ -95,8 +95,15 @@ A `{"ok":false}` (MailApp failure) counts as a failure.
 
 Without JavaScript the form does a native urlencoded POST to the same URL with
 raw field names; the script maps them to the same labels and shows the visitor a
-small thank-you page. The `_honey` honeypot is checked server-side on both
-paths — if it carries anything the script answers ok and drops the submission.
+page asking them to call or email — and nothing is emailed, because in practice
+that path is only ever bots posting straight to the `/exec` URL.
+
+**Spam** is filtered in `verdict_()` in `apps-script/Code.gs`: the honeypot, the
+no-JavaScript path, a missing or too-fast page timer (`_t`, sent by `site.js`),
+and content patterns (links in names, the same tag glued onto both names,
+Cyrillic, the "I wanted to know your price" template). Spam is not emailed but
+is logged to the Sheet with the reason in **Status** — filter on it to check
+nothing real was caught. See `CLAUDE.md` §2 for the deploy order.
 
 ### Can GitHub Actions handle the form instead?
 

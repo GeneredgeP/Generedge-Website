@@ -189,9 +189,28 @@ If a send fails for any reason, the form shows the phone number and email
 address plus a "Send it by email instead" link that opens the visitor's mail
 client pre-filled with everything they typed. A lead is never silently lost.
 
-Forms also include: a honeypot named `_honey` (checked client-side and again
-in `Code.gs`, so a no-JavaScript POST gets server-side bot filtering too),
-`aria-invalid` + `role="alert"` inline errors, an `aria-live` status region, a
+**Spam filtering lives in `verdict_()` in `apps-script/Code.gs`.** Spam is
+never emailed but always logged to the Sheet with the reason in the Status
+column, so a false positive is a row to review, not a lost lead. In order:
+
+1. `_honey` honeypot filled.
+2. **No-JavaScript (urlencoded) POST → held.** This is where the bot traffic
+   comes from: the `/exec` URL is the form's `action`, so bots scrape it and
+   POST to it directly without loading the page. The visitor gets a page asking
+   them to call or email. Real visitors run `site.js` and arrive as JSON.
+3. **No page timer, or under 2 s.** `site.js` sends `_t`, the milliseconds the
+   visitor spent on the form (set in `send()`, not `collect()`, so it never
+   appears in the mailto fallback).
+4. Content: a link in a name, the same camel-case tag glued onto both names
+   ("LarryNeokyGM MichaelNeokyGM"), several links in the message, Cyrillic
+   text, or the multilingual "I wanted to know your price" template
+   (`SPAM_PHRASES`). Add new patterns there.
+
+**Deploy order matters.** Ship `site.js` first and wait ~10 minutes for the CDN
+before redeploying the script; the other way round, real visitors on a cached
+`site.js` with no `_t` get held for those minutes (logged, not lost).
+
+Forms also include: `aria-invalid` + `role="alert"` inline errors, an `aria-live` status region, a
 20-second send timeout, `aria-disabled` while sending (not `disabled`, which
 would drop the visitor's focus to `<body>` mid-request), and a `generate_lead`
 GA event on success.

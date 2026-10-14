@@ -276,6 +276,13 @@
     var body = {};
     Object.keys(payload).forEach(function (k) { body[k] = payload[k]; });
 
+    // Spam signal for the Apps Script (see apps-script/Code.gs). Added here
+    // rather than in collect() so it never shows up in the mailto fallback.
+    if (PROVIDER === 'custom') {
+      var t0 = Number(form.dataset.t0) || 0;
+      if (t0) body._t = String(Date.now() - t0);
+    }
+
     // collect() emits human labels ("Email"), which no provider recognises as
     // the reply-to address — so set it explicitly, whichever provider is in use.
     // Without it, replying to a lead notification goes to the provider, not the
@@ -350,6 +357,12 @@
     var submit = form.querySelector('[type="submit"]');
     var sending = false;
 
+    // When the form became usable. Sent as _t (milliseconds spent on the page)
+    // so the Apps Script can tell a person from a bot: bots POST straight to
+    // the endpoint without loading the page, so they have no _t at all, and
+    // the ones that do run the page submit within a second or two.
+    form.dataset.t0 = String(Date.now());
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (sending) return;
@@ -403,6 +416,7 @@
       pending
         .then(function () {
           form.reset();
+          form.dataset.t0 = String(Date.now());
           form.querySelectorAll('[aria-invalid="true"]').forEach(function (f) { fieldError(f, ''); });
           setStatus(status, 'ok', 'Thank you. We received your request and will be in touch shortly.');
           if (window.gtag) window.gtag('event', 'generate_lead', { form_id: form.id || 'unknown' });
