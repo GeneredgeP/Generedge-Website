@@ -41,6 +41,7 @@ a{color:inherit;text-decoration:none}
 :focus-visible{outline:3px solid var(--green);outline-offset:3px;border-radius:3px}
 .sec--dark :focus-visible,.hero :focus-visible,.foot :focus-visible{outline-color:var(--glow)}
 .wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px}
+.nowrap{white-space:nowrap}
 .vh{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 
