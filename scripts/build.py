@@ -81,6 +81,9 @@ SITE = {
     "tagline": "Approval-Ready Borrowing",
     # Calendly — house rule: Home uses Steve's link, every other page uses Tracey's.
     "calendly_steve": "https://calendly.com/steve-generedge/15min",
+    # Home page CTAs call Steve directly instead of Calendly (Eduardo, 10/28).
+    "steve_phone_display": "(727) 600-3123",
+    "steve_phone_href": "+17276003123",
     "calendly_tracey": "https://calendly.com/tracey-generedge/new-meeting",
     # Analytics stays dormant until this is a real GA4 ID AND the visitor
     # accepts cookies. Leave the placeholder to keep it off.
@@ -396,11 +399,43 @@ ORG_SCHEMA = f"""<script type="application/ld+json">
     "addressCountry": "US"
   }},
   "areaServed": "US",
-  "description": "GenerEdge connects business borrowers with credit unions, CDFIs and community banks offering fair rates and terms, and guides loan files from application through closing.",
+  "foundingDate": "2022",
+  "logo": "{SITE['origin'] + BASE}/assets/img/logo.png",
+  "description": "GenerEdge connects multi-family developers who are seeking partners, and connects those partnerships with low interest-rate development, construction and permanent financing from credit unions, CDFIs and community banks. It also connects small business borrowers with mission-driven lenders and guides loan files from application through closing.",
   "disambiguatingDescription": "GenerEdge is not a lender. It is a lending connector service."
 }}
 </script>
 """
+
+
+# Floating "Call Steve" button on the home page only. Eduardo (10/28) wants
+# visitors to call Steve directly rather than book through Calendly.
+CALL_STEVE = f"""<a class="callfab" href="tel:{SITE['steve_phone_href']}" aria-label="Call Steve Wiseman at {SITE['steve_phone_display']}">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>
+  <span><b>Call Steve</b><small>{SITE['steve_phone_display']}</small></span>
+</a>
+"""
+
+
+# FAQPage structured data, generated from the page's own <details> so the
+# markup and the schema can never disagree.
+_FAQ_ITEM = re.compile(r"<details[^>]*>\s*<summary>(.*?)</summary>\s*<p>(.*?)</p>\s*</details>", re.S)
+
+
+def faq_schema(body):
+    import html as _html
+    items = []
+    for q, a in _FAQ_ITEM.findall(body):
+        strip = lambda t: _html.unescape(re.sub(r"<[^>]+>", "", t)).strip()
+        items.append({
+            "@type": "Question",
+            "name": strip(q),
+            "acceptedAnswer": {"@type": "Answer", "text": strip(a)},
+        })
+    if not items:
+        return ""
+    data = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": items}
+    return '<script type="application/ld+json">' + _script_safe(json.dumps(data, ensure_ascii=False, indent=1)) + "</script>\n"
 
 
 # Root-absolute URLs in href/src/action attributes. Protocol-relative ("//cdn")
@@ -454,6 +489,7 @@ def build():
         html = head(title, desc, canonical_path)
         if navkey == "home":
             html = html.replace("</head>", ORG_SCHEMA + "</head>")
+        html = html.replace("</head>", faq_schema(body) + "</head>")
         if out == "404.html":
             html = html.replace(
                 '<meta name="robots" content="index, follow">',
@@ -463,10 +499,14 @@ def build():
         html += header(navkey)
         html += body.rstrip() + "\n\n"
         html += FOOTER
+        if navkey == "home":
+            html = html.replace("</body>", CALL_STEVE + "</body>")
 
         # Calendly rule: Home -> Steve, all other pages -> Tracey.
         link = SITE["calendly_steve"] if navkey == "home" else SITE["calendly_tracey"]
         html = html.replace("{{CALENDLY}}", link)
+        html = html.replace("{{STEVE_PHONE}}", SITE["steve_phone_display"])
+        html = html.replace("{{STEVE_PHONE_HREF}}", SITE["steve_phone_href"])
         html = html.replace("{{PHONE}}", SITE["phone_display"])
         html = html.replace("{{PHONE_HREF}}", SITE["phone_href"])
         html = html.replace("{{EMAIL}}", SITE["email"])

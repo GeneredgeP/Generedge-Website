@@ -76,9 +76,11 @@ substituted at build time.
 
 ## House rules
 
-**Calendly.** Home page uses Steve's link. Every other page uses Tracey's. This
-is a standing rule from the client, handled automatically in `build.py` — don't
-hardcode Calendly URLs in `src/`.
+**Calendly / calling Steve.** Since 10/28 the home page has no Calendly at all:
+every CTA on it is a `tel:` link to Steve's direct line (`steve_phone_*` in
+`SITE`, from his email signature) plus a floating "Call Steve" button
+(`CALL_STEVE` in `build.py`). Every other page still uses Tracey's Calendly via
+`{{CALENDLY}}` — don't hardcode Calendly URLs in `src/`.
 
 **Brand.** Forest `#104C2F`, deep `#08281A`, green `#0E9143`, glow `#4CD787`.
 Display font Archivo 800, body font Figtree. Defined once as CSS custom
@@ -357,6 +359,15 @@ required), resized to 1600px: `mf-construction.jpg` (3GdHDDtHJ-4),
 `apartments-modern.jpg` (koH7IVuwRLw), `partners-plans.jpg` (7qJHy5Nk1cE),
 `townhomes-framing.jpg` (LIT9PpJa1LY), `contractor.jpg` (zWOgsj3j0wA).
 `.photo--color` shows a photo in full colour instead of the green duotone.
+
+**Home rebuilt 10/28 (evening)** after a prospect called the site generic:
+trust strip under the hero, "Two sides of every project" (icon tiles), a
+4-step "How a joint venture comes together", "Why GenerEdge" (the approved
+borrower's-agent copy from the old Why section, as a checklist), a leadership
+teaser, and an FAQ. The FAQ `<details>` on any page are turned into FAQPage
+JSON-LD by `faq_schema()` in `build.py` — keep each item as
+`<details><summary>Q</summary><p>A</p></details>`. Icons are inline SVG in
+`.tile` (classes `.s` stroke, `.f` fill, `.a` accent); no icon font or CDN.
 
 **The GitHub owner was renamed twice**: `ejcorral3s` -> `Generedge` ->
 `GeneredgeP`. The live Pages URL is now
