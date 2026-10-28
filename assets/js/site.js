@@ -445,3 +445,21 @@
     form.addEventListener('change', clearOnEdit);
   });
 })();
+
+
+// Steve's phone number is base64 in data-tel/data-txt so it is not in the
+// page source as plain text (see CALL_STEVE in build.py).
+(function () {
+  var els = document.querySelectorAll('[data-tel]');
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    try {
+      var tel = atob(el.getAttribute('data-tel'));
+      var txt = atob(el.getAttribute('data-txt'));
+      el.setAttribute('href', 'tel:' + tel);
+      var t = el.querySelector('[data-txt-target]');
+      if (t) t.textContent = txt;
+      if (!t) el.textContent = el.textContent.replace(/\s*$/, '') ;
+    } catch (e) {}
+  }
+})();

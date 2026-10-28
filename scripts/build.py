@@ -137,8 +137,9 @@ PAGES = {
     ),
     "business-loans": (
         "business-loans/index.html",
-        "Business Financing from Mission-Driven Lenders | GenerEdge",
-        "Business loans from $50,000 to $1 million through credit unions, CDFIs and "
+        "Business Financing for Contractors and Small Businesses | GenerEdge",
+        "Working capital, lines of credit, equipment, receivables and inventory "
+        "financing from $50,000 to $1 million through credit unions, CDFIs and "
         "community banks. No hard credit pull to get matched. No up-front fees.",
         "loans",
     ),
@@ -331,7 +332,7 @@ FOOTER = f"""</main>
   <div class="wrap">
     <div class="cols">
       <div>
-        <div style="font-family:var(--display);font-size:26px;font-weight:800;color:#fff;margin-bottom:14px">GenerEdge</div>
+        <a href="/" class="foot__logo" aria-label="GenerEdge home"><img src="/assets/img/logo-white.png" alt="GenerEdge" width="200" height="58" loading="lazy" decoding="async"></a>
         <p style="color:#CFE5D9;font-size:17px;max-width:38ch">Equal access lending. Get in touch to learn how GenerEdge can help.</p>
         <a href="/contact-us/" class="btn btn--light btn--sm" style="margin-top:20px">Contact us</a>
       </div>
@@ -408,11 +409,19 @@ ORG_SCHEMA = f"""<script type="application/ld+json">
 """
 
 
-# Floating "Call Steve" button on the home page only. Eduardo (10/28) wants
-# visitors to call Steve directly rather than book through Calendly.
-CALL_STEVE = f"""<a class="callfab" href="tel:{SITE['steve_phone_href']}" aria-label="Call Steve Wiseman at {SITE['steve_phone_display']}">
+# Floating "Call Steve" button on every page. Eduardo (10/28) wants visitors
+# to call Steve directly rather than book through Calendly. The number is a
+# GenerEdge business line (from Steve's signature), not his personal cell.
+import base64 as _b64
+_STEVE_TEL = _b64.b64encode(SITE["steve_phone_href"].encode()).decode()
+_STEVE_TXT = _b64.b64encode(SITE["steve_phone_display"].encode()).decode()
+# The number is not in the HTML in plain text: site.js decodes data-tel/data-txt
+# and writes the tel: link on load, so scrapers that don't run JavaScript
+# (the ones that feed robocall lists) never see it. Without JS the button
+# goes to the contact page.
+CALL_STEVE = f"""<a class="callfab" href="/contact-us/" data-tel="{_STEVE_TEL}" data-txt="{_STEVE_TXT}" aria-label="Call Steve Wiseman">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>
-  <span><b>Call Steve</b><small>{SITE['steve_phone_display']}</small></span>
+  <span><b>Call Steve</b><small data-txt-target></small></span>
 </a>
 """
 
@@ -499,14 +508,15 @@ def build():
         html += header(navkey)
         html += body.rstrip() + "\n\n"
         html += FOOTER
-        if navkey == "home":
-            html = html.replace("</body>", CALL_STEVE + "</body>")
+        # Floating "Call Steve" button on every page (Eduardo, 10/28).
+        html = html.replace("</body>", CALL_STEVE + "</body>")
 
         # Calendly rule: Home -> Steve, all other pages -> Tracey.
         link = SITE["calendly_steve"] if navkey == "home" else SITE["calendly_tracey"]
         html = html.replace("{{CALENDLY}}", link)
-        html = html.replace("{{STEVE_PHONE}}", SITE["steve_phone_display"])
-        html = html.replace("{{STEVE_PHONE_HREF}}", SITE["steve_phone_href"])
+        html = html.replace("{{STEVE_PHONE}}", '<span data-txt-target></span>')
+        html = html.replace("{{STEVE_PHONE_HREF}}", 'CALLSTEVE')
+        html = html.replace('href="tel:CALLSTEVE"', f'href="/contact-us/" data-tel="{_STEVE_TEL}" data-txt="{_STEVE_TXT}"')
         html = html.replace("{{PHONE}}", SITE["phone_display"])
         html = html.replace("{{PHONE_HREF}}", SITE["phone_href"])
         html = html.replace("{{EMAIL}}", SITE["email"])

@@ -77,10 +77,19 @@ substituted at build time.
 ## House rules
 
 **Calendly / calling Steve.** Since 10/28 the home page has no Calendly at all:
-every CTA on it is a `tel:` link to Steve's direct line (`steve_phone_*` in
-`SITE`, from his email signature) plus a floating "Call Steve" button
-(`CALL_STEVE` in `build.py`). Every other page still uses Tracey's Calendly via
-`{{CALENDLY}}` — don't hardcode Calendly URLs in `src/`.
+every CTA on it calls Steve's GenerEdge line (`steve_phone_*` in `SITE`, from
+his email signature; not his personal cell), and a floating "Call Steve" button
+(`CALL_STEVE` in `build.py`) is on **every** page. The number is never in the
+HTML as plain text: `build.py` base64-encodes it into `data-tel`/`data-txt`
+and `site.js` writes the `tel:` link on load, so scrapers that feed robocall
+lists don't harvest it; without JavaScript the button goes to /contact-us/.
+Use `{{STEVE_PHONE_HREF}}` / `{{STEVE_PHONE}}` in `src/` for the same effect.
+Every other page still uses Tracey's Calendly via `{{CALENDLY}}` — don't
+hardcode Calendly URLs in `src/`.
+
+**Client logo strip** (`.logos` on the home page) holds text placeholders until
+Steve sends the company names/logos; Steve has raised a concern that listing
+clients lets competitors approach them, so get his OK before filling it.
 
 **Brand.** Forest `#104C2F`, deep `#08281A`, green `#0E9143`, glow `#4CD787`.
 Display font Archivo 800, body font Figtree. Defined once as CSS custom
@@ -138,9 +147,10 @@ cannot slip through. Note that the ImageMagick step in `fetch-assets.sh`
 downscales two of the photos, which changes their ratio — re-run
 `python3 scripts/build.py && python3 scripts/check.py` after it.
 
-Also confirm image licensing — `handshake.jpg` has a stock-photo-style filename
-(`57237323-view-of-an-architect...`). If it was a licensed stock photo, confirm
-the licence transfers to the new site, or replace it.
+`handshake.jpg` and `hands-heart.png` were **removed 10/28**: shown in full
+colour, the handshake photo revealed a stock-agency watermark (it was never
+licensed), and Eduardo did not like the hands-heart image. Both are replaced by
+the Unsplash photos listed below.
 
 ### 2. Forms — connected to GenerEdge's own Apps Script
 
