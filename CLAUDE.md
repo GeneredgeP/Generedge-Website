@@ -245,6 +245,21 @@ falls back to a GET of the current page, which would put the visitor's name,
 email, phone and TCPA consent into the URL and lose the lead. `check.py`
 enforces it.
 
+### Search Console and Business Profile (10/28)
+
+- **Search Console:** https://generedge.com/ is verified under
+  **eduardo@generedge.com** (auto-verified via the Workspace domain). A
+  `google*.html` ownership file was briefly committed for a personal Gmail
+  and removed the same day; `package.py` still ships any `google*.html` at the
+  root if one is ever needed. Sitemap submitted (7 URLs). Performance and
+  indexing reports populate ~1 day after verification.
+- **Google Business Profile** "GenerEdge" (Loan agency, service-area business,
+  no public address) exists under eduardo@generedge.com but is **unverified**:
+  Google only offers **video verification**. Mailing address on file (hidden):
+  10400 Strathmore Park Court Unit 401, Rockville, MD 20852 (Tracey, Slack
+  9/24). Service areas set to FL, GA, NC, SC, TN, TX, MD. Description added.
+  Opening date left blank (month required; year is 2022).
+
 ### 3. Google Analytics is a placeholder
 
 `SITE["ga_id"]` in `build.py` is `G-XXXXXXXXXX`. Replace with the real GA4
