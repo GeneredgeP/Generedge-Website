@@ -29,6 +29,9 @@ BASE = _clean_base(os.environ.get("GE_BASE"))
 SKIP_DIRS = {'src', 'scripts', '_site', '.git', '.github'}
 pages = sorted(list(ROOT.glob('*.html')) + list(ROOT.glob('*/index.html')))
 pages = [p for p in pages if not SKIP_DIRS & set(p.relative_to(ROOT).parts)]
+# Legacy-URL redirect stubs (meta refresh pages build.py writes from
+# _redirects) are not real pages; skip them.
+pages = [p for p in pages if 'http-equiv="refresh"' not in p.read_text(encoding='utf-8')[:600]]
 problems, ids_by_page = [], {}
 
 

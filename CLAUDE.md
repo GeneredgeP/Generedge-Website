@@ -488,8 +488,12 @@ plain file copy. Connect the repo under Websites -> Advanced -> Git, or upload
 the contents of `_site/` (`python3 scripts/package.py`) to `public_html/`.
 
 `.htaccess` must be uploaded — it carries the legacy 301s that preserve SEO,
-plus HTTPS enforcement and security headers. GitHub Pages ignores it; the
-redirects only take effect on the Apache/LiteSpeed host.
+plus HTTPS enforcement and security headers. GitHub Pages ignores it, so since
+10/28 `build.py` also writes a **redirect stub** (`<meta http-equiv="refresh">`
++ canonical + noindex) at every path in `_redirects` (wildcards excluded).
+Those generated folders (`/hvac-contractors/`, `/cool-roofs/`, ...) are
+committed like every other generated page and `check.py` skips them. Add a
+legacy URL to `_redirects` and `.htaccess`, rebuild, and the stub appears.
 
 ### Build configuration
 

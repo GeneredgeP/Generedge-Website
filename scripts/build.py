@@ -486,6 +486,20 @@ def apply_base(html):
     return html
 
 
+def legacy_redirects():
+    """(source path, destination path) pairs from _redirects, wildcards skipped."""
+    pairs = []
+    for line in (ROOT / "_redirects").read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        parts = line.split()
+        if len(parts) < 2 or "*" in parts[0] or "." in parts[0]:
+            continue
+        pairs.append((parts[0], parts[1]))
+    return pairs
+
+
 def build():
     written = []
     for key, (out, title, desc, navkey) in PAGES.items():
@@ -531,6 +545,29 @@ def build():
         dest = ROOT / out
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(html, encoding="utf-8")
+        written.append(out)
+
+    # Legacy-URL redirect stubs. GitHub Pages ignores .htaccess/_redirects, so
+    # the old WordPress URLs Google still has indexed would 404 and the site
+    # would lose whatever authority they carry. For each entry in _redirects
+    # (except wildcards) emit a tiny page: meta refresh 0 + canonical, which
+    # Google treats as a permanent redirect. Harmless on Hostinger, where
+    # .htaccess answers first.
+    for src_path, dst in legacy_redirects():
+        out = src_path.strip("/") + "/index.html"
+        target = SITE["origin"] + BASE + dst
+        stub = (
+            "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">"
+            f"<title>Redirecting to {SITE['name']}</title>"
+            f"<link rel=\"canonical\" href=\"{target}\">"
+            f"<meta http-equiv=\"refresh\" content=\"0; url={target}\">"
+            "<meta name=\"robots\" content=\"noindex\">"
+            f"</head><body><p>This page has moved to <a href=\"{target}\">{target}</a>.</p>"
+            f"<script>location.replace({json.dumps(target)})</script></body></html>\n"
+        )
+        path = ROOT / out
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(stub, encoding="utf-8")
         written.append(out)
 
     # sitemap
