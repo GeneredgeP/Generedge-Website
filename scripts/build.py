@@ -126,9 +126,10 @@ NAV = [
 PAGES = {
     "index": (
         "index.html",
-        "GenerEdge — Approval-Ready Borrowing for Builders",
-        "No up-front fees. GenerEdge works for builders to get their loans approved — "
-        "lender matching, underwriting review and closing support.",
+        "GenerEdge — Development Partners for Multi-Family Projects",
+        "GenerEdge connects large and small multi-family developers who are seeking "
+        "partners, and connects the partners with low interest-rate development, "
+        "construction and permanent financing.",
         "home",
     ),
     "business-loans": (

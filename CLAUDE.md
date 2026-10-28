@@ -332,6 +332,32 @@ came through again unchanged and were already applied on 9/10.
   the same reason as before — it implies GenerEdge lends, contradicting the
   footer disclaimer on the same page.
 
+#### Client copy applied 2026-10-28 (joint-venture repositioning)
+
+Steve asked (Slack, 10/27) for a joint-venture home page; Tracey replied in the
+same thread and the 10/28 call settled the scope. Pre-change site is on the
+branch **`backup-site-2026-10-28`** — restore from there.
+
+- **Home:** Steve's headline and two paragraphs in the hero; the "How a file
+  moves" card, stats band, statement, What we do, How a file gets approved, Why
+  GenerEdge, the fee schedule and the closing CTA were removed. The builder
+  application stays (Tracey: "Leave in the application section").
+  Steve's second paragraph said "We **provide** the partners with ... financing";
+  published as "We **connect** the partners with ..." per the not-a-lender rule.
+- **About Us:** unchanged except Steve Wiseman added to Leadership (title from
+  his Gmail signature, "COO, Multifamily Development & Financing"). Stephen
+  Pool stays (Tracey). Steve's bio only states his GenerEdge role — no career
+  history was on file; replace it when he sends one.
+- **Business Financing:** page kept (Tracey). Removed the "One application, a
+  waterfall of lenders" diagram and the three audience boxes (home improvement
+  contractors / women-owned / minority-owned), as Tracey asked.
+
+New photographs (Unsplash licence: free commercial use, no attribution
+required), resized to 1600px: `mf-construction.jpg` (3GdHDDtHJ-4),
+`apartments-modern.jpg` (koH7IVuwRLw), `partners-plans.jpg` (7qJHy5Nk1cE),
+`townhomes-framing.jpg` (LIT9PpJa1LY), `contractor.jpg` (zWOgsj3j0wA).
+`.photo--color` shows a photo in full colour instead of the green duotone.
+
 **The GitHub owner was renamed twice**: `ejcorral3s` -> `Generedge` ->
 `GeneredgeP`. The live Pages URL is now
 <https://generedgep.github.io/Generedge-Website/>; both earlier URLs 404,
