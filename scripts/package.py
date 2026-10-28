@@ -43,7 +43,12 @@ STATIC = [
 # the copy loop below handles as files.
 PAGES = sorted({out.split("/")[0] for out, *_ in build.PAGES.values()})
 
-PUBLISH = PAGES + STATIC
+# Legacy-URL redirect stubs (see build.legacy_redirects) and the Google Search
+# Console ownership file(s) at the root.
+LEGACY = sorted({src.strip("/").split("/")[0] for src, _ in build.legacy_redirects()})
+GOOGLE = sorted(p.name for p in ROOT.glob("google*.html"))
+
+PUBLISH = PAGES + STATIC + LEGACY + GOOGLE
 
 
 def newest(paths):

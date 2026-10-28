@@ -29,6 +29,8 @@ BASE = _clean_base(os.environ.get("GE_BASE"))
 SKIP_DIRS = {'src', 'scripts', '_site', '.git', '.github'}
 pages = sorted(list(ROOT.glob('*.html')) + list(ROOT.glob('*/index.html')))
 pages = [p for p in pages if not SKIP_DIRS & set(p.relative_to(ROOT).parts)]
+# Google Search Console ownership file — plain text, not a page.
+pages = [p for p in pages if not p.name.startswith('google')]
 # Legacy-URL redirect stubs (meta refresh pages build.py writes from
 # _redirects) are not real pages; skip them.
 pages = [p for p in pages if 'http-equiv="refresh"' not in p.read_text(encoding='utf-8')[:600]]
