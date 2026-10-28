@@ -35,6 +35,33 @@ const SHEET_NAME = 'GenerEdge — Website Leads';
 // has none, and a bot that does run the page submits almost instantly.
 const MIN_FILL_MS = 2000;
 
+// The form_name hidden field only ever holds one of these. A bot that fills
+// every field it finds overwrites it with a name ("Form: Terry Fowler").
+const FORM_NAMES = ['Builder application', 'Business financing application', 'Contact page enquiry'];
+
+// Vendor solicitations: SEO / web-design / "AI visibility" pitches sent through
+// the contact form by people (or headless browsers), so they pass the timer.
+// Each match adds its weight; a total of 2 or more is spam. Strong terms score
+// 2 on their own; generic ones need a second signal.
+const SOLICIT = [
+  [/\bSEO\b/, 2],
+  [/search[- ]engine optimi[sz]ation/i, 2],
+  [/\bbacklinks?\b/i, 2],
+  [/rank(ing)? (higher|on google|on the first page)/i, 2],
+  [/(online|search|AI) visibility/i, 2],
+  [/web(site)? ?(design|redesign|development|audit)/i, 2],
+  [/digital marketing|lead generation/i, 2],
+  [/(checking|reviewing|looking at) your (website|site)/i, 2],
+  [/kindly (provide|share) (me )?your/i, 2],
+  [/(ChatGPT|Gemini|Perplexity|Copilot)\b/, 1],
+  [/google (and|&) bing/i, 1],
+  [/(squarespace|shopify|wix|wordpress|godaddy)/i, 1],
+  [/crawl(ing|ed)|index(ing|ed)/i, 1],
+  [/grow your (online )?(presence|business|brand)/i, 1],
+  [/reply with your (phone|number|contact)/i, 1],
+  [/(seo|webdesign|websolutions?|digital|marketing)[a-z0-9]*@/i, 1],
+];
+
 // The multilingual "I wanted to know your price" template.
 const SPAM_PHRASES = [
   /zin[aā]t (savu|j[uū]su) cenu/i,
@@ -128,6 +155,19 @@ function contentFlag_(lead) {
   if (tag && tag === camelTail_(last)) return 'spam: same tag on both names (' + tag + ')';
   if ((msg.match(/https?:\/\/|www\./gi) || []).length >= 2) return 'spam: several links in message';
   if (/[\u0400-\u04FF]/.test(all)) return 'spam: Cyrillic text';
+  // Japanese / Chinese / Korean pitches (health-tech, "AIO diagnosis"...).
+  // GenerEdge serves US businesses; a real one still lands in the Sheet.
+  if (/[\u3040-\u30FF\u3400-\u9FFF\uAC00-\uD7AF]/.test(all)) return 'spam: East Asian text';
+  const form = String(lead['Form'] || '');
+  if (form && FORM_NAMES.indexOf(form) === -1) return 'spam: form name overwritten (' + form + ')';
+  if (first && first.trim().toLowerCase() === last.trim().toLowerCase()) return 'spam: identical first and last name';
+  const phone = String(lead['Phone'] || '').replace(/\D/g, '');
+  if (phone.length >= 7 && (/(\d{3})\1\1/.test(phone) || /^(\d)\1+$/.test(phone) || /^(0?1)?(1234567|0123456)/.test(phone))) return 'spam: fake phone (' + phone + ')';
+  var score = 0, hits = [];
+  for (var j = 0; j < SOLICIT.length; j++) {
+    if (SOLICIT[j][0].test(all)) { score += SOLICIT[j][1]; hits.push(SOLICIT[j][0].source.slice(0, 18)); }
+  }
+  if (score >= 2) return 'spam: vendor solicitation (' + hits.join(', ') + ')';
   for (var i = 0; i < SPAM_PHRASES.length; i++) {
     if (SPAM_PHRASES[i].test(all)) return 'spam: known template';
   }
