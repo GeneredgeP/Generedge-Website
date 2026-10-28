@@ -87,9 +87,13 @@ Use `{{STEVE_PHONE_HREF}}` / `{{STEVE_PHONE}}` in `src/` for the same effect.
 Every other page still uses Tracey's Calendly via `{{CALENDLY}}` — don't
 hardcode Calendly URLs in `src/`.
 
-**Client logo strip** (`.logos` on the home page) holds text placeholders until
-Steve sends the company names/logos; Steve has raised a concern that listing
-clients lets competitors approach them, so get his OK before filling it.
+**Client logo strip.** Not on the live site. The `.logos` CSS and a mockup
+(commit 9b172d7 has the markup) exist for a "Companies we have worked with"
+strip; Steve has raised a concern that listing clients lets competitors
+approach them, so it only goes live once he names the companies and agrees.
+
+The floating button and the home CTAs say **"Call us"** (not "Call Steve"),
+but the number behind them is Steve's line.
 
 **Brand.** Forest `#104C2F`, deep `#08281A`, green `#0E9143`, glow `#4CD787`.
 Display font Archivo 800, body font Figtree. Defined once as CSS custom

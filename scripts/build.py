@@ -409,7 +409,7 @@ ORG_SCHEMA = f"""<script type="application/ld+json">
 """
 
 
-# Floating "Call Steve" button on every page. Eduardo (10/28) wants visitors
+# Floating "Call us" button on every page (rings Steve's line). Eduardo (10/28) wants visitors
 # to call Steve directly rather than book through Calendly. The number is a
 # GenerEdge business line (from Steve's signature), not his personal cell.
 import base64 as _b64
@@ -419,9 +419,9 @@ _STEVE_TXT = _b64.b64encode(SITE["steve_phone_display"].encode()).decode()
 # and writes the tel: link on load, so scrapers that don't run JavaScript
 # (the ones that feed robocall lists) never see it. Without JS the button
 # goes to the contact page.
-CALL_STEVE = f"""<a class="callfab" href="/contact-us/" data-tel="{_STEVE_TEL}" data-txt="{_STEVE_TXT}" aria-label="Call Steve Wiseman">
+CALL_STEVE = f"""<a class="callfab" href="/contact-us/" data-tel="{_STEVE_TEL}" data-txt="{_STEVE_TXT}" aria-label="Call GenerEdge">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>
-  <span><b>Call Steve</b><small data-txt-target></small></span>
+  <span><b>Call us</b><small data-txt-target></small></span>
 </a>
 """
 
@@ -508,7 +508,7 @@ def build():
         html += header(navkey)
         html += body.rstrip() + "\n\n"
         html += FOOTER
-        # Floating "Call Steve" button on every page (Eduardo, 10/28).
+        # Floating "Call us" button on every page (Eduardo, 10/28).
         html = html.replace("</body>", CALL_STEVE + "</body>")
 
         # Calendly rule: Home -> Steve, all other pages -> Tracey.
