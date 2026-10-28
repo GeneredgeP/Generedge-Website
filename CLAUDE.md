@@ -207,6 +207,14 @@ column, so a false positive is a row to review, not a lost lead. In order:
    ("LarryNeokyGM MichaelNeokyGM"), several links in the message, Cyrillic
    text, or the multilingual "I wanted to know your price" template
    (`SPAM_PHRASES`). Add new patterns there.
+5. **Since 10/28 (deployment version 3):** Japanese/Chinese/Korean text; a
+   `Form` value that is not one of `FORM_NAMES` (bots overwrite the hidden
+   field with a name); identical first and last name; fake phone numbers
+   (repeated groups like 1201201200); and **vendor solicitations** — SEO,
+   web-design, "AI visibility" pitches — scored by the weighted `SOLICIT`
+   list, 2 points = spam. These were the ones getting through: real people or
+   headless browsers filling /contact-us/ slowly enough to beat the timer.
+   Add a new pitch phrase to `SOLICIT`, not `SPAM_PHRASES`.
 
 **Deploy order matters.** Ship `site.js` first and wait ~10 minutes for the CDN
 before redeploying the script; the other way round, real visitors on a cached

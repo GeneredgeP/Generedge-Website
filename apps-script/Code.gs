@@ -280,7 +280,7 @@ function setup() {
     postData: {
       type: 'text/plain',
       // _t stands in for the page timer site.js sends, or this would be held as spam.
-      contents: JSON.stringify({ Form: 'Setup test', 'First name': 'Test', Email: TO, _t: '5000' }),
+      contents: JSON.stringify({ Form: 'Contact page enquiry', 'First name': 'Setup', 'Last name': 'Test', Email: TO, _t: '5000' }),
     },
   });
   console.log(res.getContent());
