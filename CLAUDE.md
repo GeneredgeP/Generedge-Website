@@ -77,9 +77,10 @@ substituted at build time.
 ## House rules
 
 **Calendly / calling Steve.** Since 10/28 the home page has no Calendly at all:
-every CTA on it calls Steve's GenerEdge line (`steve_phone_*` in `SITE`, from
-his email signature; not his personal cell), and a floating "Call Steve" button
-(`CALL_STEVE` in `build.py`) is on **every** page. The number is never in the
+every CTA on it dials the GenerEdge business line (727) 370-0200
+(`steve_phone_*` in `SITE` — the key name is historical), and a floating
+"Call us" button (`CALL_STEVE` in `build.py`) is on **every** page. **Never
+publish Steve's cell (727-600-3123, in his email signature)** — Eduardo, 10/28. The number is never in the
 HTML as plain text: `build.py` base64-encodes it into `data-tel`/`data-txt`
 and `site.js` writes the `tel:` link on load, so scrapers that feed robocall
 lists don't harvest it; without JavaScript the button goes to /contact-us/.
@@ -92,8 +93,7 @@ hardcode Calendly URLs in `src/`.
 strip; Steve has raised a concern that listing clients lets competitors
 approach them, so it only goes live once he names the companies and agrees.
 
-The floating button and the home CTAs say **"Call us"** (not "Call Steve"),
-but the number behind them is Steve's line.
+The floating button and the home CTAs say **"Call us"**.
 
 **Brand.** Forest `#104C2F`, deep `#08281A`, green `#0E9143`, glow `#4CD787`.
 Display font Archivo 800, body font Figtree. Defined once as CSS custom

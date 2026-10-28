@@ -438,3 +438,5 @@ a{color:inherit;text-decoration:none}
 
 .foot__logo{display:inline-block;margin-bottom:18px}
 .foot__logo img{width:200px;height:auto;display:block}
+[data-txt-target]:not(:empty){margin-left:.28em}
+.callfab small[data-txt-target]{margin-left:0}

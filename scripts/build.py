@@ -81,9 +81,12 @@ SITE = {
     "tagline": "Approval-Ready Borrowing",
     # Calendly — house rule: Home uses Steve's link, every other page uses Tracey's.
     "calendly_steve": "https://calendly.com/steve-generedge/15min",
-    # Home page CTAs call Steve directly instead of Calendly (Eduardo, 10/28).
-    "steve_phone_display": "(727) 600-3123",
-    "steve_phone_href": "+17276003123",
+    # "Call us" buttons and the floating button dial the GenerEdge business
+    # line, NOT Steve's cell (727-600-3123 in his signature is personal —
+    # Eduardo, 10/28). Kept as separate keys so the call line can change
+    # without touching the footer/contact-page number.
+    "steve_phone_display": "(727) 370-0200",
+    "steve_phone_href": "+17273700200",
     "calendly_tracey": "https://calendly.com/tracey-generedge/new-meeting",
     # Analytics stays dormant until this is a real GA4 ID AND the visitor
     # accepts cookies. Leave the placeholder to keep it off.
@@ -410,8 +413,8 @@ ORG_SCHEMA = f"""<script type="application/ld+json">
 
 
 # Floating "Call us" button on every page (rings Steve's line). Eduardo (10/28) wants visitors
-# to call Steve directly rather than book through Calendly. The number is a
-# GenerEdge business line (from Steve's signature), not his personal cell.
+# to call rather than book through Calendly. The number is the GenerEdge
+# business line, never Steve's personal cell.
 import base64 as _b64
 _STEVE_TEL = _b64.b64encode(SITE["steve_phone_href"].encode()).decode()
 _STEVE_TXT = _b64.b64encode(SITE["steve_phone_display"].encode()).decode()
