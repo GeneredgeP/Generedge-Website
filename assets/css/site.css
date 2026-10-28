@@ -357,3 +357,61 @@ a{color:inherit;text-decoration:none}
 @media(max-width:520px){.gallery{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.gallery__item img{transition:none}}
 @media(min-width:761px){.people>.person:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc(50% - 13px)}}
+
+/* Oct 2026: trust strip, icon tiles, 4-step path, checks list, team teaser */
+.trust{background:var(--forest);color:#DCEDE4}
+.trust__list{list-style:none;margin:0;padding:18px 28px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 40px;font-size:16px;font-weight:500}
+.trust__list li{display:flex;align-items:center;gap:10px}
+.trust__list svg{width:22px;height:22px;flex:0 0 auto;fill:none;stroke:var(--glow);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.trust__list svg .tk{stroke:#fff}
+@media(max-width:700px){.trust__list{justify-content:flex-start;gap:10px 24px;font-size:15px}}
+
+.tile{width:72px;height:72px;border-radius:20px;margin-bottom:22px;display:grid;place-items:center;position:relative;
+  background:linear-gradient(145deg,#E6F3EA 0%,#C7E4D2 60%,#AFD6BF 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -2px 0 rgba(16,76,47,.10),0 10px 24px rgba(16,76,47,.10)}
+.tile svg{width:44px;height:44px;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tile .s{stroke:var(--forest);stroke-width:1.9;fill:none}
+.tile .f{fill:rgba(14,145,67,.16);stroke:none}
+.tile .a{stroke:var(--green);stroke-width:2.2;fill:rgba(76,215,135,.35)}
+.tile--dark{background:linear-gradient(145deg,rgba(76,215,135,.28),rgba(14,145,67,.10));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -2px 0 rgba(0,0,0,.25),0 10px 24px rgba(0,0,0,.25)}
+.tile--dark .s{stroke:#EAF6EE}
+.tile--dark .f{fill:rgba(255,255,255,.08)}
+.tile--dark .a{stroke:var(--glow);fill:rgba(76,215,135,.28)}
+.ic--tile{padding:34px 30px}
+.ic--tile h3{font-size:23px}
+
+.path--4{grid-template-columns:repeat(4,1fr);gap:22px}
+.path--4::before{left:calc((100% - 66px)/8);right:calc((100% - 66px)/8)}
+.path--4 .step{padding:28px 24px}
+.path--4 .step h3{font-size:21px}
+.path--4 .step p{font-size:17px}
+.path .tile{width:64px;height:64px;border-radius:18px;margin-bottom:18px}
+.path .tile svg{width:38px;height:38px}
+@media(max-width:1000px){.path--4{grid-template-columns:repeat(2,1fr);gap:70px 22px}.path--4::before{display:none}}
+@media(max-width:560px){.path--4{grid-template-columns:1fr}}
+
+.two--top{align-items:start}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.checks li{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--rule);border-radius:14px;padding:18px 20px}
+.checks b{display:block;font-family:var(--display);font-size:19px;color:var(--ink)}
+.checks p{color:var(--muted);font-size:16.5px;margin-top:4px}
+.check{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:linear-gradient(145deg,var(--glow),var(--green));display:grid;place-items:center;margin-top:2px}
+.check svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+
+.team{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.team .person{background:var(--stone)}
+.team__more{margin-top:30px;text-align:center}
+@media(max-width:760px){.team{grid-template-columns:1fr}}
+
+/* Floating "Call Steve" button (home only) */
+.callfab{position:fixed;right:22px;bottom:22px;z-index:60;display:flex;align-items:center;gap:12px;padding:12px 20px 12px 14px;border-radius:999px;background:var(--green);color:#fff;text-decoration:none;box-shadow:0 12px 32px rgba(0,0,0,.28);transition:transform .2s ease,background .2s ease}
+.callfab:hover{background:var(--forest);transform:translateY(-2px)}
+.callfab svg{width:26px;height:26px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.callfab span{display:grid;line-height:1.15}
+.callfab b{font-family:var(--display);font-size:17px}
+.callfab small{font-size:14px;color:#DDF5E6}
+/* Sit above the cookie banner while it is showing */
+.cc:not([hidden])~.callfab{bottom:150px}
+@media(max-width:640px){.callfab{right:14px;bottom:14px;padding:12px 16px 12px 12px}.callfab small{display:none}}
+@media print{.callfab{display:none}}
