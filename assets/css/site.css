@@ -440,3 +440,11 @@ a{color:inherit;text-decoration:none}
 .foot__logo img{width:200px;height:auto;display:block}
 [data-txt-target]:not(:empty){margin-left:.28em}
 .callfab small[data-txt-target]{margin-left:0}
+
+/* Nov 2026: home hero as two titles; three ways */
+.hero .hero__title{font-size:clamp(32px,3.7vw,48px);max-width:24ch}
+.hero__title2{font-family:var(--display);font-weight:var(--dw);letter-spacing:var(--dtrack);font-size:clamp(24px,2.7vw,36px);line-height:1.2;color:var(--glow);margin-top:22px}
+.ways--3{grid-template-columns:repeat(3,1fr)}
+.ways--3 .way{padding:32px 28px}
+.ways--3 .way h3{font-size:22px}
+@media(max-width:1000px){.ways--3{grid-template-columns:1fr}}
