@@ -406,6 +406,31 @@ JSON-LD by `faq_schema()` in `build.py` — keep each item as
 `<details><summary>Q</summary><p>A</p></details>`. Icons are inline SVG in
 `.tile` (classes `.s` stroke, `.f` fill, `.a` accent); no icon font or CDN.
 
+#### Client copy applied 2026-11-03 (Steve, call of 11/02)
+
+- **Hero** is two titles and no paragraphs: the `<h1>` "Connecting Multi-Family
+  Developers and Landowners with Development Partners" and a smaller green
+  `.hero__title2` "Financing Multi-Family Development" (a `<p>`, so the page
+  keeps one `<h1>`). Steve's Slack note read "...Developers with Development
+  Partners"; the call added "and Landowners", which is what's published. The
+  ghost CTA says **"I want to partner"**.
+- **What we do** is now three cards: joint venture partners; land
+  acquisition, development & construction financing; business loans
+  **$50,000 to $5 million**. Steve wrote "We **provide** ... financing";
+  published as "We **connect** ..." per the not-a-lender rule.
+  **Open conflict:** the Business Financing page still says $50K-$1M (hero,
+  "$1M maximum" stat, amount dropdown). Confirm which is right before both
+  stand.
+- **How a joint venture comes together** is three steps, titles only
+  ("Partners define the roles" dropped); lead "From introducing the partners
+  through funding to completion, GenerEdge stays involved at every step."
+- **Why GenerEdge** heading "We work for developers, not lenders", with only
+  "Unbiased lender matching" and "Approval ready" kept on the right.
+- Steve's home bio shortened to his wording; he is sending a new headshot.
+  Stephen Pool was never on the home page; he stays on About (Tracey).
+- Steve's note also said "Founded 2023"; the trust strip, Tracey's bio and
+  the Business Profile all say 2022. Left at 2022 until confirmed.
+
 **The GitHub owner was renamed twice**: `ejcorral3s` -> `Generedge` ->
 `GeneredgeP`. The live Pages URL is now
 <https://generedgep.github.io/Generedge-Website/>; both earlier URLs 404,
