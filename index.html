@@ -71,7 +71,7 @@
    "name": "What kinds of projects do you work on?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "Multi-family developments, large and small. The builder application also accepts mixed-use, commercial and land-development projects."
+    "text": "Multi-family developments, large and small. The joint venture form also accepts mixed-use and land-development projects."
    }
   },
   {
@@ -103,7 +103,7 @@
    "name": "How do I get started?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "Call us with the green button on this page, or submit the builder application below. We come back with the partners and lenders that fit the project."
+    "text": "Call us with the green button on this page, or send us your project with the form below. We come back with the partners and lenders that fit the project."
    }
   }
  ]
@@ -130,8 +130,8 @@
   </div>
 </nav>
 <main id="main">
-  <header class="hero">
-    <div class="hero__bg"></div>
+  <header class="hero hero--photo">
+    <div class="hero__media"><img src="/assets/img/mf-construction.jpg" alt="A multi-family apartment building under construction, with a tower crane above the framed upper floors." width="1600" height="1067" fetchpriority="high" decoding="async"></div>
     <div class="wrap">
       <div>
         <span class="kicker">Multi-family joint ventures</span>
@@ -141,9 +141,6 @@
           <a href="/contact-us/" data-tel="KzE3MjczNzAwMjAw" data-txt="KDcyNykgMzcwLTAyMDA=" class="btn btn--solid">Call us &middot; <span data-txt-target></span></a>
           <a href="#apply-builder" class="btn btn--ghost">I want to partner</a>
         </div>
-      </div>
-      <div class="photo photo--color photo--hero">
-        <img src="/assets/img/mf-construction.jpg" alt="A multi-family apartment building under construction, with a tower crane above the framed upper floors." width="1600" height="1067" fetchpriority="high" decoding="async">
       </div>
     </div>
   </header>
@@ -292,11 +289,11 @@
       <div class="faq rv">
         <details open><summary>Is GenerEdge a lender?</summary><p>No. GenerEdge is a connector. We introduce developers to partners and to third-party lenders, and we help prepare and guide the file, but approval, rates and terms are determined solely by the lender.</p></details>
         <details><summary>What does GenerEdge charge?</summary><p>There are no up-front fees. Our fee is only payable if and when the loan closes.</p></details>
-        <details><summary>What kinds of projects do you work on?</summary><p>Multi-family developments, large and small. The builder application also accepts mixed-use, commercial and land-development projects.</p></details>
+        <details><summary>What kinds of projects do you work on?</summary><p>Multi-family developments, large and small. The joint venture form also accepts mixed-use and land-development projects.</p></details>
         <details><summary>What financing can you connect?</summary><p>Development, construction and permanent financing for multi-family projects, through credit unions, CDFIs and community banks that offer low interest rates.</p></details>
         <details><summary>I have a site but no partner. Can you help?</summary><p>Yes. That is exactly what the joint-venture program is for. Tell us about the site or the phase, and we look for a developer or builder whose experience fits it.</p></details>
         <details><summary>Where do you work?</summary><p>We work with developers across the United States, and meet in person in Florida.</p></details>
-        <details><summary>How do I get started?</summary><p>Call us with the green button on this page, or submit the builder application below. We come back with the partners and lenders that fit the project.</p></details>
+        <details><summary>How do I get started?</summary><p>Call us with the green button on this page, or send us your project with the form below. We come back with the partners and lenders that fit the project.</p></details>
       </div>
     </div>
   </section>
@@ -324,51 +321,62 @@
           </div>
         </div>
 
-        <form class="form" id="builder-application" data-lead-form method="post" action="https://script.google.com/macros/s/AKfycbwIcdy5jJyotFhhLvyarHE3Gx8K-_vRUsRwvYX3M092Yodhu-5NM4qS_k7VsZhnxgD9/exec">
-          <h3>Builder application</h3>
-          <p class="form__intro">For acquisition, development, construction and permanent financing.</p>
-          <input type="hidden" name="form_name" value="Builder application">
-          <p class="hp" aria-hidden="true"><label for="hp-builder">Leave this field empty</label><input id="hp-builder" type="text" name="_honey" tabindex="-1" autocomplete="off"></p>
-
-          <label class="f" for="b-project"><span>Project type <span class="req" aria-hidden="true">*</span></span>
-            <select id="b-project" name="project_type" required>
-              <option value="">Select one</option>
-              <option>Single-family</option><option>Multi-family</option><option>Commercial</option>
-              <option>Mixed-use</option><option>Land development</option><option>Other</option>
-            </select><span class="err" role="alert"></span></label>
+        <form class="form" id="jv-inquiry" data-lead-form method="post" action="https://script.google.com/macros/s/AKfycbwIcdy5jJyotFhhLvyarHE3Gx8K-_vRUsRwvYX3M092Yodhu-5NM4qS_k7VsZhnxgD9/exec">
+          <h3>Joint venture inquiry</h3>
+          <p class="form__intro">Tell us about your project. We match you with the partners you need and the financing that fits.</p>
+          <input type="hidden" name="form_name" value="Joint venture inquiry">
+          <p class="hp" aria-hidden="true"><label for="hp-jv">Leave this field empty</label><input id="hp-jv" type="text" name="_honey" tabindex="-1" autocomplete="off"></p>
 
           <div class="fgrid">
-            <label class="f" for="b-first"><span>First name <span class="req" aria-hidden="true">*</span></span><input id="b-first" name="first_name" type="text" autocomplete="given-name" required><span class="err" role="alert"></span></label>
-            <label class="f" for="b-last"><span>Last name <span class="req" aria-hidden="true">*</span></span><input id="b-last" name="last_name" type="text" autocomplete="family-name" required><span class="err" role="alert"></span></label>
+            <label class="f" for="j-role"><span>I am a <span class="req" aria-hidden="true">*</span></span>
+              <select id="j-role" name="role" required>
+                <option value="">Select one</option>
+                <option>Developer with a site or project</option>
+                <option>Landowner</option>
+                <option>Builder looking for a project</option>
+                <option>Other</option>
+              </select><span class="err" role="alert"></span></label>
+            <label class="f" for="j-need"><span>Looking for <span class="req" aria-hidden="true">*</span></span>
+              <select id="j-need" name="need" required>
+                <option value="">Select one</option>
+                <option>A joint venture partner</option>
+                <option>Financing</option>
+                <option>A partner and financing</option>
+              </select><span class="err" role="alert"></span></label>
+          </div>
+
+          <div class="fgrid">
+            <label class="f" for="j-first"><span>First name <span class="req" aria-hidden="true">*</span></span><input id="j-first" name="first_name" type="text" autocomplete="given-name" required><span class="err" role="alert"></span></label>
+            <label class="f" for="j-last"><span>Last name <span class="req" aria-hidden="true">*</span></span><input id="j-last" name="last_name" type="text" autocomplete="family-name" required><span class="err" role="alert"></span></label>
           </div>
           <div class="fgrid">
-            <label class="f" for="b-email"><span>Email <span class="req" aria-hidden="true">*</span></span><input id="b-email" name="email" type="email" autocomplete="email" required><span class="err" role="alert"></span></label>
-            <label class="f" for="b-phone"><span>Phone</span><input id="b-phone" name="phone" type="tel" autocomplete="tel"><span class="err" role="alert"></span></label>
+            <label class="f" for="j-email"><span>Email <span class="req" aria-hidden="true">*</span></span><input id="j-email" name="email" type="email" autocomplete="email" required><span class="err" role="alert"></span></label>
+            <label class="f" for="j-phone"><span>Phone</span><input id="j-phone" name="phone" type="tel" autocomplete="tel"><span class="err" role="alert"></span></label>
           </div>
 
-          <label class="f" for="b-loan"><span>Type of loan <span class="req" aria-hidden="true">*</span></span>
-            <select id="b-loan" name="loan_type" required>
+          <div class="fgrid">
+            <label class="f" for="j-location"><span>Project location</span><input id="j-location" name="location" type="text" autocomplete="off" placeholder="City, state"><span class="err" role="alert"></span></label>
+            <label class="f" for="j-units"><span>Number of units</span><input id="j-units" name="units" type="text" inputmode="numeric" autocomplete="off"><span class="err" role="alert"></span></label>
+          </div>
+
+          <label class="f" for="j-stage"><span>Project stage</span>
+            <select id="j-stage" name="stage">
               <option value="">Select one</option>
-              <option>Acquisition</option><option>Development</option><option>Construction</option>
-              <option>Permanent financing</option><option>Refinance</option><option>Other</option>
+              <option>Land only</option>
+              <option>Entitled or permitted</option>
+              <option>Ready to break ground</option>
+              <option>Under construction</option>
+              <option>Existing community</option>
             </select><span class="err" role="alert"></span></label>
 
-          <label class="f" for="b-amount"><span>Amount requested <span class="req" aria-hidden="true">*</span></span>
-            <select id="b-amount" name="amount" required>
-              <option value="">Select one</option>
-              <option>$100,000 to $2 million</option>
-              <option>Over $2 million to $5 million</option>
-              <option>Over $5 million to $10 million</option>
-              <option>Over $10 million to $15 million</option>
-              <option>Over $15 million</option>
-            </select><span class="err" role="alert"></span></label>
+          <label class="f" for="j-message"><span>About the project</span><textarea id="j-message" name="message" rows="4" maxlength="1200"></textarea><span class="err" role="alert"></span></label>
 
-          <label class="consent" for="b-consent">
-            <input id="b-consent" name="sms_consent" type="checkbox" value="yes" data-label="SMS consent">
+          <label class="consent" for="j-consent">
+            <input id="j-consent" name="sms_consent" type="checkbox" value="yes" data-label="SMS consent">
             <span>I agree to receive SMS/text messages from GenerEdge, Inc. regarding financing options, application updates, appointment scheduling, and follow-up communications. Message frequency up to 4 msgs/mo. Message and data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of credit, financing, or purchase. See our <a href="/privacy-policy/">Privacy Policy</a>.<span class="err" role="alert"></span></span>
           </label>
 
-          <button type="submit" class="btn btn--solid" style="width:100%">Submit application</button>
+          <button type="submit" class="btn btn--solid" style="width:100%">Send my project</button>
           <p class="form__status" role="status" aria-live="polite"></p>
         </form>
       </div>
