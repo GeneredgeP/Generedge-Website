@@ -426,7 +426,8 @@ JSON-LD by `faq_schema()` in `build.py` — keep each item as
   through funding to completion, GenerEdge stays involved at every step."
 - **Why GenerEdge** heading "We work for developers, not lenders", with only
   "Unbiased lender matching" and "Approval ready" kept on the right.
-- Steve's home bio shortened to his wording; he is sending a new headshot.
+- Steve's home bio shortened to his wording. New headshot (sent 11/04)
+  replaced `steve-wiseman.jpg`, cropped square to 800x800 for both pages.
   Stephen Pool was never on the home page; he stays on About (Tracey).
 - Steve's note also said "Founded 2023"; the trust strip, Tracey's bio and
   the Business Profile all say 2022. Left at 2022 until confirmed.
