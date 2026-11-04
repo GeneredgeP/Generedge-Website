@@ -166,7 +166,7 @@ Google Apps Script web app owned by GenerEdge:
   `eduardo@generedge.com`. Deployed as Web app, *Execute as: Me*, *Who has
   access: Anyone*.
 - **Source:** `apps-script/Code.gs` in this repo is the source of truth. It
-  emails each lead to `TO` (`eduardo@generedge.com`) with reply-to = the
+  emails each lead to `TO` (eduardo@, tracey@ and steve@generedge.com, since 11/04) with reply-to = the
   visitor's email, and appends it to the Google Sheet "GenerEdge — Website
   Leads" (its ID is in the script's properties, set by `setup()`).
 - **Updating the script without changing the URL:** paste the new `Code.gs`,

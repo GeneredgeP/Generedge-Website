@@ -20,7 +20,8 @@
  *    response, so that path gets a small HTML thank-you page, not JSON.
  */
 
-const TO = 'eduardo@generedge.com';
+// Every lead goes to all three (MailApp takes a comma-separated list).
+const TO = 'eduardo@generedge.com, tracey@generedge.com, steve@generedge.com';
 const SITE = 'https://generedge.com';
 const SHEET_NAME = 'GenerEdge — Website Leads';
 
