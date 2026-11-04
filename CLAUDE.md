@@ -432,6 +432,19 @@ JSON-LD by `faq_schema()` in `build.py` — keep each item as
 - Steve's note also said "Founded 2023"; the trust strip, Tracey's bio and
   the Business Profile all say 2022. Left at 2022 until confirmed.
 
+**11/04 (Eduardo):** the home hero shows `mf-construction.jpg` *behind* the
+text (`.hero--photo`, a dark gradient over the photo, title full width)
+instead of beside it. Other pages keep the two-column hero.
+
+The home form is now a **"Joint venture inquiry"** (`#jv-inquiry`, still
+inside `#apply-builder` so links from other pages keep working): I am a /
+Looking for / location / units / stage / about the project. It replaced the
+"Builder application" (project type, loan type, amount), which read like the
+Business Financing form. `Code.gs` lists the new name in `FORM_NAMES` and maps
+the new raw field names in `LABELS`; until that version is deployed, leads
+from it are held in the Sheet as "form name overwritten" (logged, not
+emailed). 'Builder application' stays in `FORM_NAMES` for cached pages.
+
 **The GitHub owner was renamed twice**: `ejcorral3s` -> `Generedge` ->
 `GeneredgeP`. The live Pages URL is now
 <https://generedgep.github.io/Generedge-Website/>; both earlier URLs 404,

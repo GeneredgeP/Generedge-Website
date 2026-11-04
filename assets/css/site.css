@@ -448,3 +448,14 @@ a{color:inherit;text-decoration:none}
 .ways--3 .way{padding:32px 28px}
 .ways--3 .way h3{font-size:22px}
 @media(max-width:1000px){.ways--3{grid-template-columns:1fr}}
+
+/* Nov 2026: home hero with the photo behind the text */
+.hero__media{position:absolute;inset:0}
+.hero__media img{width:100%;height:100%;object-fit:cover;object-position:center 35%}
+.hero__media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,40,26,.95) 0%,rgba(8,40,26,.86) 45%,rgba(8,40,26,.55) 100%)}
+.hero--photo .wrap{grid-template-columns:minmax(0,1fr);padding-top:130px;padding-bottom:130px}
+.hero--photo .hero__title{font-size:clamp(34px,4.4vw,62px);max-width:26ch}
+@media(max-width:760px){
+  .hero__media::after{background:linear-gradient(180deg,rgba(8,40,26,.80) 0%,rgba(8,40,26,.92) 100%)}
+  .hero--photo .wrap{padding-top:88px;padding-bottom:88px}
+}

@@ -37,7 +37,8 @@ const MIN_FILL_MS = 2000;
 
 // The form_name hidden field only ever holds one of these. A bot that fills
 // every field it finds overwrites it with a name ("Form: Terry Fowler").
-const FORM_NAMES = ['Builder application', 'Business financing application', 'Contact page enquiry'];
+// 'Builder application' was the home form until 11/04; kept for cached pages.
+const FORM_NAMES = ['Joint venture inquiry', 'Builder application', 'Business financing application', 'Contact page enquiry'];
 
 // Vendor solicitations: SEO / web-design / "AI visibility" pitches sent through
 // the contact form by people (or headless browsers), so they pass the timer.
@@ -84,6 +85,11 @@ const LABELS = {
   project_type: 'Project type',
   amount: 'Amount requested',
   message: 'Message',
+  role: 'I am a',
+  need: 'Looking for',
+  location: 'Project location',
+  units: 'Number of units',
+  stage: 'Project stage',
   sms_consent: 'SMS consent',
 };
 
