@@ -255,10 +255,15 @@ enforces it.
   indexing reports populate ~1 day after verification.
 - **Google Business Profile** "GenerEdge" (Loan agency, service-area business,
   no public address) exists under eduardo@generedge.com but is **unverified**:
-  Google only offers **video verification**. Mailing address on file (hidden):
-  10400 Strathmore Park Court Unit 401, Rockville, MD 20852 (Tracey, Slack
-  9/24). Service areas set to FL, GA, NC, SC, TN, TX, MD. Description added.
-  Opening date left blank (month required; year is 2022).
+  Google only offers **video verification**. Google does not store a postal
+  address until verification starts: whoever records types it in at "Get
+  verified". Use the St. Petersburg business address (Steve, Slack 10/19; not
+  written here because this repo is public), **not** the Maryland address
+  sent earlier, which is a family mailing address. Service areas (11/4): FL,
+  GA, NC, SC, TN, TX (Maryland removed). tracey@ and steve@generedge.com
+  invited as **Owners** 11/4; they must accept Google's email before the
+  profile appears for them. Opening date left blank (month required; year is
+  2022).
 
 ### 3. Google Analytics is a placeholder
 
