@@ -434,9 +434,9 @@ JSON-LD by `faq_schema()` in `build.py` — keep each item as
   partners", "We **provide** land acquisition, development & construction
   financing" and "We **provide** business loans from $25,000 to $5 million"
   (Steve wrote $50,000; the $25K floor Eduardo set the same day was kept).
-  "Provide" was published as asked: Steve chose it again after seeing
-  "connect". It sits on the same page as the FAQ "Is GenerEdge a lender? No"
-  and the footer disclaimer, so it needs Tracey's or counsel's read.
+  "Provide" went live briefly the same day, then Eduardo changed both to
+  **"We arrange"**: "provide" read as GenerEdge lending, on the same page as
+  the FAQ "Is GenerEdge a lender? No" and the footer disclaimer.
   "Two sides" lead ends "...and finds the financing for the project."
 - **How a joint venture comes together** is three steps, titles only
   ("Partners define the roles" dropped); lead "From introducing the partners
