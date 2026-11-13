@@ -85,8 +85,11 @@ HTML as plain text: `build.py` base64-encodes it into `data-tel`/`data-txt`
 and `site.js` writes the `tel:` link on load, so scrapers that feed robocall
 lists don't harvest it; without JavaScript the button goes to /contact-us/.
 Use `{{STEVE_PHONE_HREF}}` / `{{STEVE_PHONE}}` in `src/` for the same effect.
-Every other page still uses Tracey's Calendly via `{{CALENDLY}}` — don't
-hardcode Calendly URLs in `src/`.
+Every other page's "Schedule" buttons use `{{CALENDLY}}`. Since 11/13 that is
+**one link on every page**, Steve's 30-minute meeting (`SITE["calendly"]`):
+Tracey's `new-meeting` link and Steve's `15min` link both 404'd. The copy
+next to those buttons says "30 minutes" to match. Don't hardcode Calendly URLs
+in `src/`.
 
 **Client logo strip.** Not on the live site. The `.logos` CSS and a mockup
 (commit 9b172d7 has the markup) exist for a "Companies we have worked with"
@@ -423,9 +426,10 @@ JSON-LD by `faq_schema()` in `build.py` — keep each item as
   acquisition, development & construction financing; business loans
   **$50,000 to $5 million**. Steve wrote "We **provide** ... financing";
   published as "We **connect** ..." per the not-a-lender rule.
-  **Open conflict:** the Business Financing page still says $50K-$1M (hero,
-  "$1M maximum" stat, amount dropdown). Confirm which is right before both
-  stand.
+  **Resolved 11/13 (Eduardo):** business financing is **$25,000 to
+  $5 million** everywhere: this card, the Business Financing hero, its
+  $25K / $5M stats, its amount dropdown (two bands added above $1M) and the
+  page's meta description.
 - **How a joint venture comes together** is three steps, titles only
   ("Partners define the roles" dropped); lead "From introducing the partners
   through funding to completion, GenerEdge stays involved at every step."

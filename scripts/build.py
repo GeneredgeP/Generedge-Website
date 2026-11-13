@@ -79,15 +79,15 @@ SITE = {
     "locality": "St. Petersburg",
     "region": "FL",
     "tagline": "Approval-Ready Borrowing",
-    # Calendly — house rule: Home uses Steve's link, every other page uses Tracey's.
-    "calendly_steve": "https://calendly.com/steve-generedge/15min",
+    # Calendly — one link on every page since 11/13 (Steve's 30-minute
+    # meeting). Tracey's "new-meeting" link and Steve's "15min" both 404'd.
+    "calendly": "https://calendly.com/steve-generedge/30",
     # "Call us" buttons and the floating button dial the GenerEdge business
     # line, NOT Steve's cell (727-600-3123 in his signature is personal —
     # Eduardo, 10/28). Kept as separate keys so the call line can change
     # without touching the footer/contact-page number.
     "steve_phone_display": "(727) 370-0200",
     "steve_phone_href": "+17273700200",
-    "calendly_tracey": "https://calendly.com/tracey-generedge/new-meeting",
     # Analytics stays dormant until this is a real GA4 ID AND the visitor
     # accepts cookies. Leave the placeholder to keep it off.
     "ga_id": "G-XXXXXXXXXX",
@@ -142,7 +142,7 @@ PAGES = {
         "business-loans/index.html",
         "Business Financing for Contractors and Small Businesses | GenerEdge",
         "Working capital, lines of credit, equipment, receivables and inventory "
-        "financing from $50,000 to $1 million through credit unions, CDFIs and "
+        "financing from $25,000 to $5 million through credit unions, CDFIs and "
         "community banks. No hard credit pull to get matched. No up-front fees.",
         "loans",
     ),
@@ -528,9 +528,7 @@ def build():
         # Floating "Call us" button on every page (Eduardo, 10/28).
         html = html.replace("</body>", CALL_STEVE + "</body>")
 
-        # Calendly rule: Home -> Steve, all other pages -> Tracey.
-        link = SITE["calendly_steve"] if navkey == "home" else SITE["calendly_tracey"]
-        html = html.replace("{{CALENDLY}}", link)
+        html = html.replace("{{CALENDLY}}", SITE["calendly"])
         html = html.replace("{{STEVE_PHONE}}", '<span data-txt-target></span>')
         html = html.replace("{{STEVE_PHONE_HREF}}", 'CALLSTEVE')
         html = html.replace('href="tel:CALLSTEVE"', f'href="/contact-us/" data-tel="{_STEVE_TEL}" data-txt="{_STEVE_TXT}"')
