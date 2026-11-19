@@ -145,10 +145,12 @@ its output with hand-designed artwork — nothing else depends on how they look.
 `apple-touch-icon.png` and `favicon.svg` draw the same forward chevron as the
 logo mark; keep them in step if either changes.
 
-**Social card since 11/19 (Steve, Slack 11/18):** only the chevron and the
-"GenerEdge" wordmark, cut from `logo.png` without its "Approval-Ready
-Borrowing" lines; the headline and the "Connecting business borrowers with
-mission-driven lenders" line are gone. The band reads "Joint ventures ·
+**Social card since 11/19 (Steve, Slack 11/18):** no "Approval-Ready
+Borrowing" headline and no "Connecting business borrowers with mission-driven
+lenders" line. It now carries the chevron + "GenerEdge" wordmark (cut from
+`logo.png` without its tagline lines), the home hero's two titles, and
+`mf-construction.jpg` on the right behind a chevron-shaped edge (Eduardo found
+the logo-only version too plain). The band reads "Joint ventures ·
 Development financing · Business loans" ("Underwriting" was dropped under the
 not-a-lender rule). `build.py` appends `?v=N` to the og:image URL: bump it
 whenever the card changes, or LinkedIn and WhatsApp keep showing the cached

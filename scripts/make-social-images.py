@@ -37,21 +37,50 @@ def font(name, size):
     return ImageFont.truetype(str(FONTS / name), size)
 
 
+def wrap(d, text, fnt, width):
+    lines, line = [], ""
+    for word in text.split():
+        trial = (line + " " + word).strip()
+        if d.textlength(trial, font=fnt) <= width or not line:
+            line = trial
+        else:
+            lines.append(line)
+            line = word
+    lines.append(line)
+    return lines
+
+
 def og_card():
+    """Shared by every page. Since 11/19 (Steve): no "Approval-Ready Borrowing"
+    and no business-loan tagline; the home hero's joint-venture titles instead,
+    next to the site's construction photo."""
     W, H = 1200, 630
+    band = 104
+    field = H - band
     im = Image.new("RGB", (W * SS, H * SS), WHITE)
     d = ImageDraw.Draw(im)
 
-    # Forest band across the foot of the card.
-    band = 104
-    d.rectangle([0, (H - band) * SS, W * SS, H * SS], fill=FOREST)
-    d.rectangle([0, (H - band) * SS, W * SS, (H - band + 6) * SS], fill=GLOW)
+    # Photo on the right, its left edge cut as the logo's forward chevron.
+    x0, tip = 640, 700
+    pw, ph = W - x0 + 80, field
+    photo = Image.open(IMG / "mf-construction.jpg").convert("RGB")
+    # Crop to the panel's shape around the crane and the framed top floor.
+    target = pw / ph
+    cw = round(photo.height * target)
+    left = min(max(330, 0), photo.width - cw)
+    photo = photo.crop((left, 0, left + cw, photo.height)).resize((pw * SS, ph * SS), Image.LANCZOS)
+    mask = Image.new("L", photo.size, 0)
+    md = ImageDraw.Draw(mask)
+    off = x0 - 80  # photo is pasted at this x
+    pts = [(x0 - off, 0), (pw, 0), (pw, ph), (x0 - off, ph), (tip - off, ph / 2)]
+    md.polygon([(x * SS, y * SS) for x, y in pts], fill=255)
+    im.paste(photo, (off * SS, 0), mask)
+    # Glow stroke along the chevron edge.
+    d.line([(x0 * SS, 0), (tip * SS, field / 2 * SS), (x0 * SS, field * SS)],
+           fill=GLOW, width=7 * SS, joint="curve")
 
-    # The real logo alone on the white field, large and centred. Steve (11/18)
-    # asked for the "Approval-Ready Borrowing" headline and the business-loan
-    # tagline to come off the card; it is shared by every page, JV ones included.
-    # Chevron + "GenerEdge" wordmark cut from the real logo, without the
-    # "Approval-Ready Borrowing" lines (pixel boxes of the 800x233 logo.png).
+    # Logo: chevron + "GenerEdge" wordmark cut from logo.png (800x233), without
+    # the "Approval-Ready Borrowing" lines.
     src = Image.open(IMG / "logo.png").convert("RGBA")
     chevron = src.crop((4, 5, 122, 198))
     word = src.crop((146, 4, 553, 92))
@@ -61,21 +90,38 @@ def og_card():
     lock = Image.new("RGBA", (chevron.width + gap + word.width, ch_h), (0, 0, 0, 0))
     lock.paste(chevron, (0, 0), chevron)
     lock.paste(word, (chevron.width + gap, (ch_h - word.height) // 2), word)
-    lw = 540 * SS  # keeps the 800px logo near 1:1, so it stays sharp
+    lw = 290 * SS
     lh = round(lw * lock.height / lock.width)
     lock = lock.resize((lw, lh), Image.LANCZOS)
-    field = H - band
-    im.paste(lock, ((W * SS - lw) // 2, (field * SS - lh) // 2), lock)
+    im.paste(lock, (72 * SS, 62 * SS), lock)
 
+    kicker = font("Figtree-600.ttf", 19 * SS)
+    headline = font("Archivo-800.ttf", 40 * SS)
+    sub = font("Figtree-600.ttf", 27 * SS)
     small = font("Figtree-600.ttf", 25 * SS)
     mark = font("Archivo-800.ttf", 27 * SS)
 
-    d.text((72 * SS, (H - band + 40) * SS), "generedge.com", font=mark, fill=WHITE)
+    y = 62 + 62 + 34
+    d.text((72 * SS, y * SS), "M U L T I - F A M I L Y   J O I N T   V E N T U R E S",
+           font=kicker, fill=GREEN)
+    y += 40
+    for line in wrap(d, "Connecting Multi-Family Developers and Landowners with Development Partners",
+                     headline, 520 * SS):
+        d.text((72 * SS, y * SS), line, font=headline, fill=FOREST)
+        y += 50
+    y += 14
+    d.rectangle([72 * SS, y * SS, 120 * SS, (y + 5) * SS], fill=GLOW)
+    y += 22
+    d.text((72 * SS, y * SS), "Financing Multi-Family Development", font=sub, fill=GREEN)
 
+    # Forest band across the foot of the card.
+    d.rectangle([0, field * SS, W * SS, H * SS], fill=FOREST)
+    d.rectangle([0, field * SS, W * SS, (field + 6) * SS], fill=GLOW)
+    d.text((72 * SS, (field + 40) * SS), "generedge.com", font=mark, fill=WHITE)
     # Not "Underwriting": GenerEdge is not a lender.
     right = "Joint ventures  ·  Development financing  ·  Business loans"
     rw = d.textlength(right, font=small)
-    d.text((W * SS - 72 * SS - rw, (H - band + 43) * SS), right, font=small, fill=PALE)
+    d.text((W * SS - 72 * SS - rw, (field + 43) * SS), right, font=small, fill=PALE)
 
     im = im.resize((W, H), Image.LANCZOS)
     out = IMG / "og-default.png"

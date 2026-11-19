@@ -261,7 +261,7 @@ def _script_safe(json_text):
 
 def head(title, desc, canonical_path):
     canonical = SITE["origin"] + BASE + canonical_path
-    og_image = SITE["origin"] + BASE + "/assets/img/og-default.png?v=2"  # bump when the card changes, so LinkedIn/WhatsApp re-fetch
+    og_image = SITE["origin"] + BASE + "/assets/img/og-default.png?v=3"  # bump when the card changes, so LinkedIn/WhatsApp re-fetch
     form_json = _script_safe(json.dumps(form_config(), separators=(",", ":")))
     ga_json = _script_safe(json.dumps(SITE["ga_id"]))
     robots = "noindex, nofollow" if NOINDEX else "index, follow"
