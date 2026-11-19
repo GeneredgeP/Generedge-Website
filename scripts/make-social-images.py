@@ -47,29 +47,33 @@ def og_card():
     d.rectangle([0, (H - band) * SS, W * SS, H * SS], fill=FOREST)
     d.rectangle([0, (H - band) * SS, W * SS, (H - band + 6) * SS], fill=GLOW)
 
-    # The real logo, scaled to width and composited on the white field.
-    logo = Image.open(IMG / "logo.png").convert("RGBA")
-    lw = 430 * SS
-    lh = round(lw * logo.height / logo.width)
-    logo = logo.resize((lw, lh), Image.LANCZOS)
-    im.paste(logo, (72 * SS, 66 * SS), logo)
+    # The real logo alone on the white field, large and centred. Steve (11/18)
+    # asked for the "Approval-Ready Borrowing" headline and the business-loan
+    # tagline to come off the card; it is shared by every page, JV ones included.
+    # Chevron + "GenerEdge" wordmark cut from the real logo, without the
+    # "Approval-Ready Borrowing" lines (pixel boxes of the 800x233 logo.png).
+    src = Image.open(IMG / "logo.png").convert("RGBA")
+    chevron = src.crop((4, 5, 122, 198))
+    word = src.crop((146, 4, 553, 92))
+    ch_h = round(word.height * 1.25)
+    chevron = chevron.resize((round(chevron.width * ch_h / chevron.height), ch_h), Image.LANCZOS)
+    gap = 26
+    lock = Image.new("RGBA", (chevron.width + gap + word.width, ch_h), (0, 0, 0, 0))
+    lock.paste(chevron, (0, 0), chevron)
+    lock.paste(word, (chevron.width + gap, (ch_h - word.height) // 2), word)
+    lw = 540 * SS  # keeps the 800px logo near 1:1, so it stays sharp
+    lh = round(lw * lock.height / lock.width)
+    lock = lock.resize((lw, lh), Image.LANCZOS)
+    field = H - band
+    im.paste(lock, ((W * SS - lw) // 2, (field * SS - lh) // 2), lock)
 
-    headline = font("Archivo-800.ttf", 62 * SS)
-    sub = font("Figtree-600.ttf", 30 * SS)
     small = font("Figtree-600.ttf", 25 * SS)
     mark = font("Archivo-800.ttf", 27 * SS)
 
-    d.text((72 * SS, 252 * SS), "Approval-Ready", font=headline, fill=FOREST)
-    d.text((72 * SS, 324 * SS), "Borrowing", font=headline, fill=GREEN)
-
-    # Shared by every page, so it must be true of every page.
-    d.text((72 * SS, 424 * SS),
-           "Connecting business borrowers with mission-driven lenders.",
-           font=sub, fill=MUTED)
-
     d.text((72 * SS, (H - band + 40) * SS), "generedge.com", font=mark, fill=WHITE)
 
-    right = "Lender matching  ·  Underwriting  ·  Closing"
+    # Not "Underwriting": GenerEdge is not a lender.
+    right = "Joint ventures  ·  Development financing  ·  Business loans"
     rw = d.textlength(right, font=small)
     d.text((W * SS - 72 * SS - rw, (H - band + 43) * SS), right, font=small, fill=PALE)
 
